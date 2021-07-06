@@ -24,6 +24,12 @@ function home_page_setting_html(){
 		'posts_per_page' => -1
 	);
 	$posts = get_posts($args);
+	// echo '<pre>';
+	// print_r($posts);
+
+
+
+
 
 
 /*
@@ -47,27 +53,69 @@ $uposts = get_posts(
 
 
 
-	
-	if(isset($_POST['home_page_setting_submit'])){
-		$home_page_id = $_POST['home_page_id'];
+
+if(isset($_POST['home_page_setting_submit'])){
+	$home_page_id = $_POST['home_page_id'];
 
 		// show_on_front page
 		// page_on_front $page->ID
 
-		update_option('show_on_front', 'page');
-		update_option('page_on_front', $home_page_id);
-	}
-	?>
-	<form method="post">
-		<select name="home_page_id">
-			<?php foreach ($posts as $key => $value): ?>
+	update_option('show_on_front', 'page');
+	update_option('page_on_front', $home_page_id);
+}
+?>
 
-				<option value="<?= $value->ID ?>"><?= $value->post_title ?><?= get_post_meta($value->ID, 'hps_name', true); ?></option>
-			<?php endforeach ?>
-		</select>
-		<input type="submit" name="home_page_setting_submit">
-	</form>
-	<?php 
+
+
+
+
+
+
+
+
+
+<form method="post">
+	<select name="home_page_id">
+		<?php foreach ($posts as $key => $value): ?>
+			
+			<?php  if(get_option("page_on_front", true) == $value->ID){ ?> 
+				<option value="<?= $value->ID ?>" selected><?= $value->post_title  ?></option>
+			<?php }else{ ?>
+				<option value="<?= $value->ID ?>"><?= $value->post_title  ?></option>
+			<?php } ?>
+			
+		<?php endforeach ?>
+
+
+	}
+}
+
+</select>
+<input type="submit" name="home_page_setting_submit">
+</form>
+<?php
+echo "<pre>"; 
+print_r(get_option("page_on_front", true));
+echo "<br>";
+print_r($value->ID);
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php 
 }
 
 /**
@@ -111,20 +159,20 @@ add_action( 'save_post', 'wpdocs_save_meta_box' );
 
 
 function wporg_register_taxonomy_course() {
-     $labels = array(
-         'name'              => _x( 'Courses', 'taxonomy general name' ),
-         'singular_name'     => _x( 'Course', 'taxonomy singular name' ),
-         'search_items'      => __( 'Search Courses' ),
-         'all_items'         => __( 'All Courses' ),
-         'parent_item'       => __( 'Parent Course' ),
-         'parent_item_colon' => __( 'Parent Course:' ),
-         'edit_item'         => __( 'Edit Course' ),
-         'update_item'       => __( 'Update Course' ),
-         'add_new_item'      => __( 'Add New Course' ),
-         'new_item_name'     => __( 'New Course Name' ),
-         'menu_name'         => __( 'Course' ),
-     );
-     $args   = array(
+	$labels = array(
+		'name'              => _x( 'Courses', 'taxonomy general name' ),
+		'singular_name'     => _x( 'Course', 'taxonomy singular name' ),
+		'search_items'      => __( 'Search Courses' ),
+		'all_items'         => __( 'All Courses' ),
+		'parent_item'       => __( 'Parent Course' ),
+		'parent_item_colon' => __( 'Parent Course:' ),
+		'edit_item'         => __( 'Edit Course' ),
+		'update_item'       => __( 'Update Course' ),
+		'add_new_item'      => __( 'Add New Course' ),
+		'new_item_name'     => __( 'New Course Name' ),
+		'menu_name'         => __( 'Course' ),
+	);
+	$args   = array(
          'hierarchical'      => true, // make it hierarchical (like categories)
          'labels'            => $labels,
          'show_ui'           => true,
@@ -132,10 +180,8 @@ function wporg_register_taxonomy_course() {
          'query_var'         => true,
          'rewrite'           => [ 'slug' => 'course' ],
      );
-     register_taxonomy( 'course', [ 'page' ], $args );
+	register_taxonomy( 'course', [ 'page' ], $args );
 }
 add_action( 'init', 'wporg_register_taxonomy_course' );
-
-
 
 
