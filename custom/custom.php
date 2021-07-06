@@ -24,6 +24,29 @@ function home_page_setting_html(){
 		'posts_per_page' => -1
 	);
 	$posts = get_posts($args);
+
+
+/*
+$uposts = get_posts(
+    array(
+        'post_type' => 'product',
+        'numberposts' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => $cat->taxonomy,
+                'field' => 'slug',
+                'terms' => array($cat->slug),
+                'operator' => 'IN',
+            )
+         )
+    )
+);
+*/
+
+
+
+
+
 	
 	if(isset($_POST['home_page_setting_submit'])){
 		$home_page_id = $_POST['home_page_id'];
@@ -86,6 +109,32 @@ function wpdocs_save_meta_box( $post_id ) {
 add_action( 'save_post', 'wpdocs_save_meta_box' );
 
 
+
+function wporg_register_taxonomy_course() {
+     $labels = array(
+         'name'              => _x( 'Courses', 'taxonomy general name' ),
+         'singular_name'     => _x( 'Course', 'taxonomy singular name' ),
+         'search_items'      => __( 'Search Courses' ),
+         'all_items'         => __( 'All Courses' ),
+         'parent_item'       => __( 'Parent Course' ),
+         'parent_item_colon' => __( 'Parent Course:' ),
+         'edit_item'         => __( 'Edit Course' ),
+         'update_item'       => __( 'Update Course' ),
+         'add_new_item'      => __( 'Add New Course' ),
+         'new_item_name'     => __( 'New Course Name' ),
+         'menu_name'         => __( 'Course' ),
+     );
+     $args   = array(
+         'hierarchical'      => true, // make it hierarchical (like categories)
+         'labels'            => $labels,
+         'show_ui'           => true,
+         'show_admin_column' => true,
+         'query_var'         => true,
+         'rewrite'           => [ 'slug' => 'course' ],
+     );
+     register_taxonomy( 'course', [ 'page' ], $args );
+}
+add_action( 'init', 'wporg_register_taxonomy_course' );
 
 
 
