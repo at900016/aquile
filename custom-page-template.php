@@ -94,3 +94,48 @@
 </form>
 </body>
 </html>
+
+
+
+
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+add_action( 'woocommerce_before_calculate_totals', 'add_custom_price' );
+
+function add_custom_price( $cart_object ) {
+  global $woocommerce;
+  $free_product_id = 25;
+    $custom_price = 5; // This will be your custom price  
+    foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+        if ( $free_product_id == $cart_item['product_id'] ) {
+            $free_key = $cart_item_key;
+            $free_qty = $cart_item['quantity'];
+            $cart_item['data']->set_price(0); // Optionally set the price to zero
+        }
+    }
+
+    if (count(WC()->cart->get_cart()) >= 5){
+     echo "pen ";
+ }
+
+
+}
+add_action( 'template_redirect', 'quadlayers_add_to_cart' );
+
+
+function quadlayers_add_to_cart(){
+ global $woocommerce;
+ if ( $woocommerce->cart->cart_contents_count >= 5){
+
+   $product_id = 25;
+   $con = WC()->cart->cart_contents;
+   $product_cart_id = WC()->cart->generate_cart_id( $product_id );
+   if(!WC()->cart->find_product_in_cart( $product_cart_id )) {  
+    $id_rate = WC()->cart->add_to_cart( $product_id);
+
+}
+}}
